@@ -108,7 +108,12 @@ public class ParkingService {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
-                System.out.println("Please pay the parking fare:" + ticket.getPrice());
+              //  if (duration <= 30 minutes) {
+              //  System.out.println("You stayed less than 30 min, you don't have to pay the parking fare, it's free");
+             //   }
+              //  else {
+                    System.out.println("Please pay the parking fare:" + ticket.getPrice());
+             //   }
                 System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
             }else{
                 System.out.println("Unable to update ticket information. Error occurred");
