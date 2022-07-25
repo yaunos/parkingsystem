@@ -16,6 +16,7 @@ public class FareCalculatorService {
         //TODO: Some tests are failing here. Need to check if this logic is correct
         double duration = (outHour - inHour)/(60.0*60*1000);
 
+
         if (duration <= 0.5) {
             ticket.setPrice(0.0);
             return;

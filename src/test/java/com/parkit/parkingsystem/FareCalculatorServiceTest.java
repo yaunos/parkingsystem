@@ -139,6 +139,34 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
+    public void calculateFareRegularCarDiscountApplied(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  90 * 60 * 1000) );//90 minutes parking time should give a 5% discount parking fare
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket);
+        assertEquals ( 1.5*Fare.CAR_RATE_PER_HOUR*0.95 , ticket.getPrice());
+    }
+
+    @Test
+    public void calculateFareRegularBikeDiscountApplied(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  120 * 60 * 1000) );//29 minutes parking time should give a free parking fare
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket);
+        assertEquals( 1*Fare.BIKE_RATE_PER_HOUR*0.95 , ticket.getPrice() );
+    }
+
+    @Test
     public void calculateFareCarWithMoreThanADayParkingTime(){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
