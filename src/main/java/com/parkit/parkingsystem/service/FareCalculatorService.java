@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.constants.Fare;
+import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.Ticket;
 
 public class FareCalculatorService {
@@ -14,21 +15,26 @@ public class FareCalculatorService {
         long outHour = ticket.getOutTime().getTime();
 
         //TODO: Some tests are failing here. Need to check if this logic is correct
-        double duration = (outHour - inHour)/(60.0*60*1000);
+        long duration = outHour - inHour;
+        double coefficient  = duration / (60.0 *60 *1000);
 
 
-        if (duration <= 0.5) {
+        if (coefficient <= 0.5) {
             ticket.setPrice(0.0);
             return;
         } else {
+            TicketDAO ticketDAO = new TicketDAO();
+            if(ticketDAO.checkTicketExists(ticket.getVehicleRegNumber())){
+                coefficient = coefficient * 0.95;
+            }
 
             switch (ticket.getParkingSpot().getParkingType()) {
                 case CAR: {
-                    ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+                    ticket.setPrice(coefficient * Fare.CAR_RATE_PER_HOUR);
                     break;
                 }
                 case BIKE: {
-                    ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
+                    ticket.setPrice(coefficient * Fare.BIKE_RATE_PER_HOUR);
                     break;
                 }
                 default:

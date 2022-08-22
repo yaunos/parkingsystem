@@ -43,6 +43,11 @@ public class Ticket {
         this.price = price;
     }
 
+    public double getDiscountedPrice() {
+        double discountedPrice = price*0.95;
+        return discountedPrice;
+    }
+
     public Date getInTime() {
         return inTime;
     }
@@ -58,4 +63,6 @@ public class Ticket {
     public void setOutTime(Date outTime) {
         this.outTime = outTime;
     }
+
+
 }

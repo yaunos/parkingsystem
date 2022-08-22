@@ -2,6 +2,7 @@ package com.parkit.parkingsystem;
 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
@@ -141,7 +142,7 @@ public class FareCalculatorServiceTest {
     @Test
     public void calculateFareRegularCarDiscountApplied(){
         Date inTime = new Date();
-        inTime.setTime( System.currentTimeMillis() - (  90 * 60 * 1000) );//90 minutes parking time should give a 5% discount parking fare
+        inTime.setTime( System.currentTimeMillis() - (  90 * 60 * 1000) );//90 minutes parking time with a car should give a 5% discount parking fare
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
@@ -149,21 +150,49 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals ( 1.5*Fare.CAR_RATE_PER_HOUR*0.95 , ticket.getPrice());
+        assertEquals ( 1.5*Fare.CAR_RATE_PER_HOUR*0.95 , ticket.getDiscountedPrice());
     }
 
     @Test
     public void calculateFareRegularBikeDiscountApplied(){
+        Ticket firstTicket = new Ticket(); //The bike enters a first time
+
         Date inTime = new Date();
-        inTime.setTime( System.currentTimeMillis() - (  120 * 60 * 1000) );//29 minutes parking time should give a free parking fare
+        inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );//1h parking time should give 1H hour parking fare
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
 
-        ticket.setInTime(inTime);
-        ticket.setOutTime(outTime);
-        ticket.setParkingSpot(parkingSpot);
-        fareCalculatorService.calculateFare(ticket);
-        assertEquals( 1*Fare.BIKE_RATE_PER_HOUR*0.95 , ticket.getPrice() );
+        //fill the ticket in - renseigner
+
+        firstTicket.setInTime(inTime);
+        firstTicket.setOutTime(outTime);
+        firstTicket.setParkingSpot(parkingSpot);
+        firstTicket.setVehicleRegNumber("ABCDEF");
+        fareCalculatorService.calculateFare(firstTicket);
+        assertEquals( 1*Fare.BIKE_RATE_PER_HOUR*0.95 , firstTicket.getPrice() );
+
+        //Save the first ticket
+        TicketDAO ticketDAO = new TicketDAO();
+        ticketDAO.saveTicket(firstTicket);
+
+        Ticket secondTicket = new Ticket(); //The bike enters a second time
+
+
+        Date inTime2 = new Date();
+        inTime.setTime(System.currentTimeMillis() - (  120 * 60 * 1000) );//2h parking time should give a 5% discount parking fare for a second time parked with the same car
+        Date outTime2 = new Date();
+
+        secondTicket.setInTime(inTime);
+        secondTicket.setOutTime(outTime);
+        secondTicket.setParkingSpot(parkingSpot);
+        secondTicket.setVehicleRegNumber("ABCDEF");
+        fareCalculatorService.calculateFare(secondTicket);
+        assertEquals( 2*Fare.BIKE_RATE_PER_HOUR*0.95 , secondTicket.getPrice() );
+
+        //Save the second ticket
+        TicketDAO ticketDAO2 = new TicketDAO();
+        ticketDAO.saveTicket(secondTicket);
+
     }
 
     @Test
