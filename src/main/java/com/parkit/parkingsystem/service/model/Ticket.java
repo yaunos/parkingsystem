@@ -1,6 +1,5 @@
-package com.parkit.parkingsystem.model;
+package com.parkit.parkingsystem.service.model;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Ticket {
@@ -44,7 +43,7 @@ public class Ticket {
     }
 
     public double getDiscountedPrice() {
-        double discountedPrice = price*0.95;
+        double discountedPrice = price*(0.95);
         return discountedPrice;
     }
 

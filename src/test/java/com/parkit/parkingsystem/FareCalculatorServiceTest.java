@@ -2,10 +2,11 @@ package com.parkit.parkingsystem;
 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
-import com.parkit.parkingsystem.dao.TicketDAO;
-import com.parkit.parkingsystem.model.ParkingSpot;
-import com.parkit.parkingsystem.model.Ticket;
+//import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.service.model.ParkingSpot;
+import com.parkit.parkingsystem.service.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
+//import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -151,8 +152,12 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
         assertEquals ( 1.5*Fare.CAR_RATE_PER_HOUR*0.95 , ticket.getDiscountedPrice());
+
+
     }
 
+
+    /*
     @Test
     public void calculateFareRegularBikeDiscountApplied(){
         Ticket firstTicket = new Ticket(); //The bike enters a first time
@@ -169,7 +174,6 @@ public class FareCalculatorServiceTest {
         firstTicket.setParkingSpot(parkingSpot);
         firstTicket.setVehicleRegNumber("ABCDEF");
         fareCalculatorService.calculateFare(firstTicket);
-        assertEquals( 1*Fare.BIKE_RATE_PER_HOUR*0.95 , firstTicket.getPrice() );
 
         //Save the first ticket
         TicketDAO ticketDAO = new TicketDAO();
@@ -179,11 +183,11 @@ public class FareCalculatorServiceTest {
 
 
         Date inTime2 = new Date();
-        inTime.setTime(System.currentTimeMillis() - (  120 * 60 * 1000) );//2h parking time should give a 5% discount parking fare for a second time parked with the same car
+        inTime2.setTime(System.currentTimeMillis() - (  120 * 60 * 1000) );//2h parking time should give a 5% discount parking fare for a second time parked with the same car
         Date outTime2 = new Date();
 
-        secondTicket.setInTime(inTime);
-        secondTicket.setOutTime(outTime);
+        secondTicket.setInTime(inTime2);
+        secondTicket.setOutTime(outTime2);
         secondTicket.setParkingSpot(parkingSpot);
         secondTicket.setVehicleRegNumber("ABCDEF");
         fareCalculatorService.calculateFare(secondTicket);
@@ -193,7 +197,7 @@ public class FareCalculatorServiceTest {
         TicketDAO ticketDAO2 = new TicketDAO();
         ticketDAO.saveTicket(secondTicket);
 
-    }
+    } */
 
     @Test
     public void calculateFareCarWithMoreThanADayParkingTime(){
@@ -208,5 +212,35 @@ public class FareCalculatorServiceTest {
         fareCalculatorService.calculateFare(ticket);
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
+
+    /*
+    @Test
+    public void calculateFareError (){
+        IllegalArgumentException thrown = null; Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            Ticket ticket = new Ticket();
+            ticket.setInTime(new Date());
+            ticket.setOutTime(new Date());
+            ticket.setVehicleRegNumber("ABCDEF");
+            ParkingSpot spot = new ParkingSpot(1, ParkingType.PLANE, true);
+            ticket.setParkingSpot(spot);
+            fareCalculatorService.calculateFare(ticket);
+        });
+
+        NullPointerException thrown2 = null; Assertions.assertThrows(NullPointerException.class, () -> {
+            Ticket ticket = new Ticket();
+            ticket.setInTime(new Date());
+            ticket.setOutTime(new Date());
+            ticket.setVehicleRegNumber("ABCDEF");
+            fareCalculatorService.calculateFare(ticket);
+
+        });
+
+        Assertions.assertNotNull (thrown);
+        Assertions.assertNotNull (thrown2);
+
+
+     */
+
+
 
 }
