@@ -1,4 +1,4 @@
-package com.parkit.parkingsystem.service.model;
+package com.parkit.parkingsystem.model;
 
 import java.util.Date;
 

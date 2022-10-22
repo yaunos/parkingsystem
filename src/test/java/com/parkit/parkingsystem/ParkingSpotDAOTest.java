@@ -1,13 +1,10 @@
-/*
 package com.parkit.parkingsystem;
 
-
-import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
-import com.parkit.parkingsystem.service.model.ParkingSpot;
-
+import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
+import com.parkit.parkingsystem.model.ParkingSpot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.times;
 
 public class ParkingSpotDAOTest {
     @InjectMocks
@@ -33,7 +31,7 @@ public class ParkingSpotDAOTest {
 
     //On mock l'accès à la config de la base dans le rép config
     @Mock
-    DatabaseConfig databaseConfig;
+    DataBaseTestConfig databaseConfig;
 
     @Mock
     private ResultSet resultSet;
@@ -49,7 +47,7 @@ public class ParkingSpotDAOTest {
 
     @Test
     void getNextAvailableSlotTest() throws SQLException {
-        Mockito.when(connection.createStatement(DBConstants.GET_NEXT_PARKING_SPOT)).thenReturn(preparedStatement);
+        Mockito.when(connection.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT)).thenReturn(preparedStatement);
         Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
         Mockito.when(resultSet.next()).thenReturn(true);
         Mockito.when(resultSet.getInt(1)).thenReturn(2);
@@ -60,4 +58,5 @@ public class ParkingSpotDAOTest {
     }
 
 }
- */
+
+
