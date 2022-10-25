@@ -6,15 +6,14 @@ import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
-//import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FareCalculatorServiceTest {
 
@@ -169,7 +168,7 @@ public class FareCalculatorServiceTest {
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
 
-        //fill the ticket in - renseigner
+        //fill the ticket in
 
         firstTicket.setInTime(inTime);
         firstTicket.setOutTime(outTime);
@@ -178,7 +177,6 @@ public class FareCalculatorServiceTest {
         fareCalculatorService.calculateFare(firstTicket);
 
         //Save the first ticket
-        //TicketDAO ticketDAO = new TicketDAO();
         ticketDAO.saveTicket(firstTicket);
 
         Ticket secondTicket = new Ticket(); //The bike enters a second time
@@ -196,7 +194,6 @@ public class FareCalculatorServiceTest {
         assertEquals(2 * Fare.BIKE_RATE_PER_HOUR * 0.95, secondTicket.getPrice());
 
         //Save the second ticket
-        //TicketDAO ticketDAO2 = new TicketDAO();
         ticketDAO.saveTicket(secondTicket);
 
     }
@@ -216,35 +213,3 @@ public class FareCalculatorServiceTest {
 
     }
 }
-   /*
-    @Test
-    public void calculateFareError() {
-        IllegalArgumentException thrown = null;
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Ticket ticket = new Ticket();
-            ticket.setInTime(new Date());
-            ticket.setOutTime(new Date());
-            ticket.setVehicleRegNumber("ABCDEF");
-            ParkingSpot spot = new ParkingSpot(1, ParkingType.PLANE, true);
-            ticket.setParkingSpot(spot);
-            fareCalculatorService.calculateFare(ticket);
-        });
-
-        NullPointerException thrown2 = null;
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            Ticket ticket = new Ticket();
-            ticket.setInTime(new Date());
-            ticket.setOutTime(new Date());
-            ticket.setVehicleRegNumber("ABCDEF");
-            fareCalculatorService.calculateFare(ticket);
-
-        });
-
-        Assertions.assertNotNull(thrown);
-        Assertions.assertNotNull(thrown2);
-
-
-    }
-
-     */
-
