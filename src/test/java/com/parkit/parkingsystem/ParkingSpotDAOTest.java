@@ -56,7 +56,6 @@ public class ParkingSpotDAOTest {
         assertEquals(2, nextAvailableSlot);
         Mockito.verify(preparedStatement, times(1)).executeQuery();
     }
-
 }
 
 
