@@ -91,22 +91,20 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testNextAvailableParkingSlotNumberForACar() throws Exception{
+    public void testVerifyVehicleRegistrationNumberForACar() throws Exception{
 
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         Ticket ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
-        int nextSlot = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
-        assertNotEquals(1, nextSlot);
+        assertNotEquals("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZZZZZZZZZZZZZZZZZZZ", ticket.getVehicleRegNumber());
     }
 
     @Test
-    public void testNextAvailableParkingSlotNumberForABike() throws Exception{
+    public void testVerifyParkingNumberForABike() throws Exception{
 
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         Ticket ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
-        int nextSlot = parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE);
-        assertNotEquals(1, nextSlot);
+        assertNotEquals(-1, ticket.getParkingSpot());
     }
 }
